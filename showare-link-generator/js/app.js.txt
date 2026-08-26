@@ -1,0 +1,435 @@
+/* =====================================================
+   GERADOR DE LINKS SHOWARE
+   Autor: Victor Hugo Vianna
+
+   Funcionalidades:
+   - Seleção de modelo visual
+   - Preview dinâmica
+   - Alteração de display
+   - Alteração de filter
+   - Substituição automática de canal
+   - Copiar link
+   - Visualizar link
+   - Limpar campos
+   ===================================================== */
+
+/* =====================================================
+   CONFIGURAÇÃO PADRÃO
+   ===================================================== */
+
+let displaySelecionado = "cards";
+let filtroSelecionado = "day";
+let imagemSelecionada = "assets/cards-dia.jpg";
+
+/* =====================================================
+   EXIBIR MENSAGENS
+   ===================================================== */
+
+function exibirMensagem(texto, tipo = "sucesso") {
+
+    const mensagem =
+        document.getElementById("mensagem");
+
+    mensagem.innerHTML = texto;
+
+    if (tipo === "erro") {
+        mensagem.style.color = "#dc3545";
+    } else {
+        mensagem.style.color = "#28a745";
+    }
+}
+
+/* =====================================================
+   VALIDAR URL
+   ===================================================== */
+
+function validarURL(url) {
+
+    try {
+
+        new URL(url);
+
+        return true;
+
+    } catch {
+
+        return false;
+
+    }
+}
+
+/* =====================================================
+   SELEÇÃO DE MODELO
+   ===================================================== */
+
+function selecionarModelo(
+    card,
+    display,
+    filtro,
+    nome,
+    imagem
+) {
+
+    document
+        .querySelectorAll(".modelo-card")
+        .forEach(c => {
+            c.classList.remove("selecionado");
+        });
+
+    card.classList.add("selecionado");
+
+    displaySelecionado = display;
+    filtroSelecionado = filtro;
+    imagemSelecionada = imagem;
+
+    atualizarPreview(
+        nome,
+        display,
+        filtro,
+        imagem
+    );
+}
+
+/* =====================================================
+   ATUALIZAR PREVIEW
+   ===================================================== */
+
+function atualizarPreview(
+    nome,
+    display,
+    filtro,
+    imagem
+) {
+
+    const preview =
+        document.getElementById(
+            "previewImagem"
+        );
+
+    if (preview) {
+
+        preview.src = imagem;
+    }
+
+    let descricao = "";
+
+    switch (nome) {
+
+        case "Lista Simples":
+
+            descricao =
+                "Ideal para eventos com poucas sessões.";
+            break;
+
+        case "Lista por Semana":
+
+            descricao =
+                "Agrupa sessões pelo dia da semana.";
+            break;
+
+        case "Lista por Dia":
+
+            descricao =
+                "Agrupa as sessões pela data.";
+            break;
+
+        case "Cards Simples":
+
+            descricao =
+                "Exibição moderna em cartões.";
+            break;
+
+        case "Cards por Semana":
+
+            descricao =
+                "Recomendado para eventos recorrentes.";
+            break;
+
+        case "Cards por Dia":
+
+            descricao =
+                "⭐ Modelo recomendado para teatros, shows e temporadas.";
+            break;
+    }
+
+    document.getElementById(
+        "modeloInfo"
+    ).innerHTML = `
+        <strong>Modelo:</strong> ${nome}<br>
+        <strong>Display:</strong> ${display}<br>
+        <strong>Filter:</strong> ${filtro}<br><br>
+        ${descricao}
+    `;
+}
+
+/* =====================================================
+   GERAR LINK
+   ===================================================== */
+
+function gerarLink() {
+
+    const urlOriginal =
+        document.getElementById(
+            "urlOriginal"
+        ).value.trim();
+
+    const codigo =
+        document.getElementById(
+            "codigo"
+        ).value.trim();
+
+    if (!urlOriginal) {
+
+        exibirMensagem(
+            "Informe o Link Original.",
+            "erro"
+        );
+
+        return;
+    }
+
+    if (!codigo) {
+
+        exibirMensagem(
+            "Informe o Código do Canal.",
+            "erro"
+        );
+
+        return;
+    }
+
+    if (!validarURL(urlOriginal)) {
+
+        exibirMensagem(
+            "URL inválida.",
+            "erro"
+        );
+
+        return;
+    }
+
+    let novaUrl = urlOriginal;
+
+    /* =========================================
+       ALTERA CANAL
+       ========================================= */
+
+    if (
+        novaUrl.includes(
+            "websaleschannelkey=internet"
+        )
+    ) {
+
+        novaUrl =
+            novaUrl.replace(
+                "websaleschannelkey=internet",
+                `websaleschannelkey=${codigo}`
+            );
+
+    }
+    else if (
+        novaUrl.includes(
+            "sw_sc=internet"
+        )
+    ) {
+
+        novaUrl =
+            novaUrl.replace(
+                "sw_sc=internet",
+                `sw_sc=${codigo}`
+            );
+
+    }
+    else {
+
+        novaUrl =
+            novaUrl.replace(
+                /internet/gi,
+                codigo
+            );
+    }
+
+    /* =========================================
+       ALTERA DISPLAY
+       ========================================= */
+
+    if (
+        novaUrl.includes("display=")
+    ) {
+
+        novaUrl =
+            novaUrl.replace(
+                /display=(list|cards)/i,
+                `display=${displaySelecionado}`
+            );
+    }
+
+    /* =========================================
+       ALTERA FILTER
+       ========================================= */
+
+    if (
+        novaUrl.includes("filter=")
+    ) {
+
+        novaUrl =
+            novaUrl.replace(
+                /filter=(none|day|dayofweek)/i,
+                `filter=${filtroSelecionado}`
+            );
+    }
+
+    document.getElementById(
+        "resultado"
+    ).value = novaUrl;
+
+    exibirMensagem(
+        "✅ Link gerado com sucesso."
+    );
+}
+
+/* =====================================================
+   COPIAR LINK
+   ===================================================== */
+
+function copiarLink() {
+
+    const resultado =
+        document.getElementById(
+            "resultado"
+        ).value;
+
+    if (!resultado) {
+
+        exibirMensagem(
+            "Gere um link primeiro.",
+            "erro"
+        );
+
+        return;
+    }
+
+    navigator.clipboard
+        .writeText(resultado)
+        .then(() => {
+
+            exibirMensagem(
+                "✅ Link copiado com sucesso."
+            );
+
+        })
+        .catch(() => {
+
+            exibirMensagem(
+                "Erro ao copiar o link.",
+                "erro"
+            );
+
+        });
+}
+
+/* =====================================================
+   VISUALIZAR LINK
+   ===================================================== */
+
+function visualizarLink() {
+
+    const resultado =
+        document.getElementById(
+            "resultado"
+        ).value;
+
+    if (!resultado) {
+
+        exibirMensagem(
+            "Gere um link antes de visualizar.",
+            "erro"
+        );
+
+        return;
+    }
+
+    if (!validarURL(resultado)) {
+
+        exibirMensagem(
+            "Link inválido.",
+            "erro"
+        );
+
+        return;
+    }
+
+    window.open(
+        resultado,
+        "_blank"
+    );
+}
+
+/* =====================================================
+   LIMPAR CAMPOS
+   ===================================================== */
+
+function limparCampos() {
+
+    document.getElementById(
+        "urlOriginal"
+    ).value = "";
+
+    document.getElementById(
+        "codigo"
+    ).value = "";
+
+    document.getElementById(
+        "resultado"
+    ).value = "";
+
+    displaySelecionado = "cards";
+    filtroSelecionado = "day";
+
+    document
+        .querySelectorAll(".modelo-card")
+        .forEach(c => {
+            c.classList.remove("selecionado");
+        });
+
+    const recomendado =
+        document.querySelector(
+            ".recomendado"
+        );
+
+    if (recomendado) {
+
+        recomendado.classList.add(
+            "selecionado"
+        );
+    }
+
+    atualizarPreview(
+        "Cards por Dia",
+        "cards",
+        "day",
+        "assets/cards-dia.jpg"
+    );
+
+    exibirMensagem(
+        "✅ Campos limpos."
+    );
+}
+
+/* =====================================================
+   INICIALIZAÇÃO DA PÁGINA
+   ===================================================== */
+
+window.addEventListener(
+    "DOMContentLoaded",
+    function () {
+
+        atualizarPreview(
+            "Cards por Dia",
+            "cards",
+            "day",
+            "assets/cards-dia.jpg"
+        );
+
+    }
+);
