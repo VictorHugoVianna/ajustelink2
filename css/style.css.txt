@@ -1,0 +1,231 @@
+/* ===================================================== */
+/* RESET */
+/* ===================================================== */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* ===================================================== */
+/* BODY */
+/* ===================================================== */
+
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    background: #f4f7fb;
+    color: #333;
+    padding: 20px;
+}
+
+/* ===================================================== */
+/* CONTAINER */
+/* ===================================================== */
+
+.container {
+    max-width: 1400px;
+    margin: 0 auto;
+    background: #ffffff;
+    border-radius: 20px;
+    padding: 30px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+}
+
+/* ===================================================== */
+/* HEADER */
+/* ===================================================== */
+
+header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+header h1 {
+    color: #003366;
+    margin-bottom: 10px;
+    font-size: 32px;
+}
+
+header p {
+    color: #666;
+}
+
+/* ===================================================== */
+/* GUIA */
+/* ===================================================== */
+
+.guia {
+    background: #eef6ff;
+    border-left: 6px solid #0066cc;
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 30px;
+}
+
+.guia h2 {
+    margin-bottom: 15px;
+    color: #003366;
+}
+
+.guia ol {
+    padding-left: 20px;
+    line-height: 1.8;
+}
+
+/* ===================================================== */
+/* FORMULÁRIOS */
+/* ===================================================== */
+
+label {
+    display: block;
+    margin-top: 20px;
+    margin-bottom: 8px;
+    font-weight: bold;
+}
+
+input,
+textarea {
+    width: 100%;
+    border: 1px solid #d6d6d6;
+    border-radius: 10px;
+    padding: 12px;
+    font-size: 14px;
+}
+
+textarea {
+    min-height: 120px;
+    resize: vertical;
+}
+
+input:focus,
+textarea:focus {
+    outline: none;
+    border-color: #0066cc;
+    box-shadow: 0 0 0 3px rgba(0, 102, 204, .15);
+}
+
+/* ===================================================== */
+/* TÍTULOS */
+/* ===================================================== */
+
+.titulo-modelos {
+    margin-top: 35px;
+    margin-bottom: 20px;
+    color: #003366;
+}
+
+/* ===================================================== */
+/* GRID DOS MODELOS */
+/* ===================================================== */
+
+.modelos {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 20px;
+}
+
+/* ===================================================== */
+/* CARD */
+/* ===================================================== */
+
+.modelo-card {
+
+    background: white;
+
+    border: 2px solid #e0e0e0;
+
+    border-radius: 16px;
+
+    overflow: hidden;
+
+    cursor: pointer;
+
+    transition: all .25s ease;
+
+    position: relative;
+}
+
+.modelo-card:hover {
+
+    transform: translateY(-4px);
+
+    box-shadow: 0 12px 25px rgba(0,0,0,.12);
+}
+
+.modelo-card.selecionado {
+
+    border-color: #0066cc;
+
+    box-shadow: 0 0 0 4px rgba(0,102,204,.15);
+}
+
+/* ===================================================== */
+/* CARD RECOMENDADO */
+/* ===================================================== */
+
+.modelo-card.recomendado {
+
+    border: 3px solid #ff9800;
+
+    background: linear-gradient(
+        180deg,
+        #fffaf3,
+        #ffffff
+    );
+}
+
+.badge {
+
+    position: absolute;
+
+    top: 10px;
+    right: 10px;
+
+    background: #ff9800;
+
+    color: white;
+
+    font-size: 12px;
+
+    font-weight: bold;
+
+    padding: 6px 10px;
+
+    border-radius: 50px;
+
+    z-index: 2;
+}
+
+/* ===================================================== */
+/* IMAGENS DOS MODELOS */
+/* ===================================================== */
+
+.modelo-imagem {
+
+    width: 100%;
+
+    aspect-ratio: 1 / 1;
+
+    object-fit: cover;
+
+    display: block;
+
+    transition: .3s;
+}
+
+.modelo-card:hover .modelo-imagem {
+
+    transform: scale(1.02);
+}
+
+/* ===================================================== */
+/* TEXTO DOS MODELOS */
+/* ===================================================== */
+
+.modelo-card h3 {
+
+    padding: 15px 15px 5px;
+}
+
+.modelo-card p {
